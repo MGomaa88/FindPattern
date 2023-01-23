@@ -4,6 +4,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,14 +16,14 @@ int findPattern(std::string text, std::string word)
 	string temp = "";
 	vector <std::string> wordsVec;
 	string wordRevers;
-
+	bool found = 0;
 	vector <bool> boolVec;
 
-	/*for (int i = 0; i < wordL; i++)
+	for (int i = 0; i < wordL; i++)
 	{
 		wordRevers += word.at(counter - 1);
 		counter--;
-	}*/
+	}
 
 
 	for (int i = 0; i < textL; i++)
@@ -42,62 +43,51 @@ int findPattern(std::string text, std::string word)
 
 	}
 
+		//std::sort(wordsVec.begin(), wordsVec.end());
 
-
+	// best case
+	for (size_t i = 0; i < wordsVec.size() && !found; i++)
+	{
+		if (wordsVec[i].length() == wordL )
+		{
+			if (wordsVec[i] == word)
+			{
+				found = 1;
+				return 1;
+			}
+			else if (wordsVec[i] == wordRevers)
+			{
+				found = 1;
+				return 2;
+			}
+			
+		}
+	}
+		
+	// worst case
 	for (size_t i = 0; i < wordsVec.size(); i++)
 	{
 		boolVec.clear();
 
-		if (word == wordsVec[i])
-			return 1;
-
 		
-
-		else if (wordsVec[i].length() == wordL)
+		for (size_t r = 0; r < wordL; r++)
 		{
-			for (size_t r = 0; r < wordL; r++)
+			for (size_t c = 0; c < wordsVec[i].length(); c++)
 			{
-				for (size_t c = 0; c < wordL; c++)
+
+				if (word.at(r) == wordsVec[i].at(c)) // && boolVec.size()<wordL
 				{
+					boolVec.push_back(1);
 
-					if (word.at(r) == wordsVec[i].at(c))
+					if (boolVec.size() == wordL)
 					{
-
-						boolVec.push_back(1);
-						if (boolVec.size() == wordL)
-						{
-							return 2;
-						}
-
+						return 3;
 					}
+
 				}
 			}
 		}
-
-
-		else
-		{
-
-			for (size_t r = 0; r < wordL; r++)
-			{
-				for (size_t c = 0; c < wordsVec[i].length(); c++)
-				{
-
-					if (word.at(r) == wordsVec[i].at(c) ) // && boolVec.size()<wordL
-					{
-						boolVec.push_back(1);	
-
-						if (boolVec.size() == wordL)
-						{
-							return 3;
-						}
-
-					}
-				}
-			}
-			
-			
-		}
+	
 	}
 
 
